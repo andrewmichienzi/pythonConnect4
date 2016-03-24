@@ -8,7 +8,7 @@ class Board:
 		self.winSize = winSize
 		self.board = [[0 for i in range(num_rows)]for j in range(num_columns)]
 		self.noWinner = True
-		self.temp = 0
+		
 ###################################
 # createBoard()
 ##################################		
@@ -85,34 +85,136 @@ class Board:
 				self.board[row][col] = player
 				return True
         	return False
-
+###########################################
+#
+#Select Token
+#
+############################################
 	def selectToken(self, player):
 		col = self.chooseColumn(player)
 		self.chooseRow(player, col)
-		self.checkHorizontalWin()
+		self.checkBoard()
 		self.createBoard()
 
+################################
+#
+#Check board for win
+#
+################################
+
+	def checkBoard(self):
+		#self.checkHorizontalWin()
+		#self.checkVerticalWin()	
+		#self.checkDiagonalWin1()
+		self.checkDiagonalWin2()
+########################################
+#
+#Check Horizontal Win
+#
+######################################
+
+
 	def checkHorizontalWin(self):
+		print "check"
 		for row in range(self.num_rows):
 			inARow = 1
-			self.temp = self.get(row, 0)
-			sys.stdout.write('{}'.format(self.get(row,0)))
-			
+			temp = self.get(row, 0)
+			print self.get(row,0)
+			print temp
+			print 'hello'
 			for col in range(1, self.num_columns, 1):
-				sys.stdout.write('\ntemp:\t'.format(self.temp))
-				if self.get(row, col) == self.temp and self.temp != 0:
+				if self.get(row, col) == temp and temp != 0:
 					inARow += 1
 					print 'if'
 					#sys.stdout.write('\ninARow:\t{}'.format(inARow))
 				else:
 					inARow = 1
-					self.temp = self.get(row, col)
+					temp = self.get(row, col)
 					print 'else'
 
 				if inARow == self.winSize:
 					print 'Horizontal win'
 					self.noWinner = False	
 
+###################################
+#
+#Check Vertical Win
+#
+####################################
+	
+
+	def checkVerticalWin(self):
+		for col in range(self.num_columns):
+			inARow = 1
+			temp = self.board[0][col]
+			for row in range(1,self.num_rows, 1):
+				if self.get(row,col) == temp and temp != 0:
+					inARow+=1
+				else:
+					inARow = 1
+					temp = self.get(row,col)
+				
+				if inARow == self.winSize:
+					print 'Vertical Win'
+					self.noWinner = False
+
+
+	def checkDiagonalWin1(self):
+		coly = self.num_columns - self.winSize
+		rowx = self.num_rows - self.winSize
+		for col in range(coly+1):
+			for row in range(rowx+1):
+				y = col
+				x = row
+
+				inARow = 1
+				temp = self.get(x,y)
+				x+=1
+				y+=1
+				while y < self.num_columns and x < self.num_rows:
+
+
+					if(self.get(x,y) == temp and temp != 0):
+						inARow+=1
+						print 'inARow'
+						print inARow
+					else:
+						temp = self.get(x,y)
+						inARow = 1
+					if inARow == self.winSize:
+						print 'Diagonal Win'
+						self.noWinner = False
+					y+=1
+					x+=1
+
+
+	def checkDiagonalWin2(self):
+		rowx = self.winSize
+		coly = self.winSize
+		for col in range(coly+1, 0, -1):
+			for row in range(rowx+1):
+				y = col
+				x = row
+				inARow = 1
+				temp = self.get(x, y)
+				x += 1
+				y -= 1
+				while x < self.num_rows and y > -1:
+					sys.stdout.write('\nboard[{}][{}]'.format(x,y))
+		
+					if self.get(x, y) == temp and temp != 0:
+						inARow +=1
+					else:
+						temp = self.get(x, y)
+						inARow = 1
+					if inARow == self.winSize:
+						print 'Diagonal win'
+						self.noWinner = False
+					x += 1
+					y -= 1
+			
+
+	
 	def get(self, row, col):
 		return self.board[row][col]
 
