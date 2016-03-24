@@ -9,6 +9,7 @@ class Connect4Game:
 		self.isPlayer1 = True
 
 	def play(self):
+		win = lambda x:sys.stdout.write('Player {} is the winner.  Congratulations!'.format(x))
 		self.board.createBoard()
 		while self.board.noWinner:
 			x = self.getInput()
@@ -20,7 +21,7 @@ class Connect4Game:
 				self.board.selectToken(x, self.getPlayer())
 				self.switchPlayer()
 		winner = self.board.winner
-		sys.stdout.write('Player {} is the winner.  Congragulations!'.format(winner))
+		win(winner)
 
 	def getPlayer(self):
 		if self.isPlayer1:
