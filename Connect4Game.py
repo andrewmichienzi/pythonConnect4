@@ -9,7 +9,7 @@ class Connect4Game:
 		self.isPlayer1 = True
 
 	def play(self):
-		win = lambda x:sys.stdout.write('Player {} is the winner.  Congratulations!'.format(x))
+		win = lambda x:sys.stdout.write('\nPlayer {} is the winner.  Congratulations!\n'.format(x))
 		self.board.createBoard()
 		while self.board.noWinner:
 			x = self.getInput()

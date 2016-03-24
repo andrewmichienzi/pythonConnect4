@@ -119,22 +119,18 @@ class Board:
 
 
 	def checkHorizontalWin(self):
-		print "check"
 		for row in range(self.num_rows):
 			inARow = 1
 			temp = self.get(row, 0)
 			print self.get(row,0)
 			print temp
-			print 'hello'
 			for col in range(1, self.num_columns, 1):
 				if self.get(row, col) == temp and temp != 0:
 					inARow += 1
-					print 'if'
 					#sys.stdout.write('\ninARow:\t{}'.format(inARow))
 				else:
 					inARow = 1
 					temp = self.get(row, col)
-					print 'else'
 
 				if inARow == self.winSize:
 					print 'Horizontal win'
