@@ -8,6 +8,10 @@ class Board:
 		self.winSize = winSize
 		self.board = [[0 for i in range(num_rows)]for j in range(num_columns)]
 		self.noWinner = True
+		self.winner = 0
+		self.save = False
+		self.save = True
+		self.player = 1
 		
 ###################################
 # createBoard()
@@ -29,6 +33,9 @@ class Board:
                         	sys.stdout.write('{} '.format(self.board[row][col]))
                 	print '\n'
         	print '\n\n'
+
+	def getPlayer(self):
+		return self.player
 
 ##################################
 #Check and Choose row
@@ -56,14 +63,12 @@ class Board:
                 	return True
         	return False
 
-	def chooseColumn(self, player):
-
-        	sys.stdout.write('Player {}s turn\n'.format(player))
-        	col = input('Choose a column:\t')
+	def chooseColumn(self, col, player):
+			
         	isValidColumn = self.checkColumn(col)
         	while not isValidColumn:
                 	col = input('Incorrect column, choose another:\t')
-			isValidColumn = checkColumn(col)
+			isValidColumn = self.checkColumn(col)
         	return col
 
 
@@ -76,10 +81,7 @@ class Board:
 			sys.stdout.write('\nError: you chose {} but therea re only {} columns on the board!'.format(col, self.num_columns))
         
         	for row in range(self.num_rows-1, -1, -1):
-			sys.stdout.write('\nrow:\t{}'.format(row))
-                	sys.stdout.write('\ncol:\t{}'.format(col))
 			token = self.board[row][col]
-			sys.stdout.write('\ntoken:\t{}'.format(token))
                 	if token == 0:
                         	#Actually place token
 				self.board[row][col] = player
@@ -90,11 +92,13 @@ class Board:
 #Select Token
 #
 ############################################
-	def selectToken(self, player):
-		col = self.chooseColumn(player)
+	def selectToken(self, col, player):
+		self.player = player
+		col = self.chooseColumn(col, player)
 		self.chooseRow(player, col)
 		self.checkBoard()
-		self.createBoard()
+		if not self.noWinner:
+			self.winner = player
 
 ################################
 #
@@ -103,9 +107,9 @@ class Board:
 ################################
 
 	def checkBoard(self):
-		#self.checkHorizontalWin()
-		#self.checkVerticalWin()	
-		#self.checkDiagonalWin1()
+		self.checkHorizontalWin()
+		self.checkVerticalWin()	
+		self.checkDiagonalWin1()
 		self.checkDiagonalWin2()
 ########################################
 #
@@ -176,8 +180,6 @@ class Board:
 
 					if(self.get(x,y) == temp and temp != 0):
 						inARow+=1
-						print 'inARow'
-						print inARow
 					else:
 						temp = self.get(x,y)
 						inARow = 1
@@ -191,8 +193,8 @@ class Board:
 	def checkDiagonalWin2(self):
 		rowx = self.winSize
 		coly = self.winSize
-		for col in range(coly+1, 0, -1):
-			for row in range(rowx+1):
+		for col in range(coly-1, 0, -1):
+			for row in range(rowx-1):
 				y = col
 				x = row
 				inARow = 1
@@ -200,7 +202,6 @@ class Board:
 				x += 1
 				y -= 1
 				while x < self.num_rows and y > -1:
-					sys.stdout.write('\nboard[{}][{}]'.format(x,y))
 		
 					if self.get(x, y) == temp and temp != 0:
 						inARow +=1
